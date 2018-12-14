@@ -1,8 +1,8 @@
-// timer server 在一个微队列里接受所有传入timer，使得其共用同一个timer
-// 同一次发布才会共用timeServer
-// 1. 所有 Server 继承自 Server
+// timer server 在一个微队列里接受所有传入timer，使得其共用同一个timer 同一次发布才会共用timeServer
+
+// 1. 所有 serverClass 继承自 Server
 // 2. ServerFactory 用于管理 event 实例使用的 servers，在实例化event时实例化出来
-// 3. ServerFactory 可以继承servers
+// 3. ServerFactory 可以继承servers, 并通过 Event 将接口暴露出来
 class ServerInstance {
   constructor(servers) {
     Object.keys(servers).forEach(key => {

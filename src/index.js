@@ -1,7 +1,7 @@
 import {noop, RemoveEvent, resolveSubscribe, schedulerExector} from './helper.js'
 import ServerFactory, {TimerServer} from './server'
 export * from './builtIn'
-export TimerServer
+export * from './server'
 class Data {
   constructor() {
     this.index = []
@@ -88,8 +88,8 @@ export default class Event extends SuperEvent {
   }
 }
 class ShareDataEvent extends SuperEvent {
-  #schedulers = null
-  #data = null
+  #schedulers = []
+  #data = defaultData
   constructor(data, schedulers) {
     super()
     this.#schedulers = schedulers
