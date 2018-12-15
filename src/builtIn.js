@@ -1,50 +1,52 @@
 function getError(msg) {
   return () => {
-    throw new Error(msg)
-  }
+    throw new Error(msg);
+  };
 }
-const timerError = getError('timerServer is needed')
+const timerError = getError('timerServer is needed');
 function filter(fn) {
   return (data, next) => {
-    fn(data) && next(data)
-  }
+    fn(data) && next(data);
+  };
 }
 
 function map(fn) {
   return (data, next) => {
-    next(fn(data))
-  }
+    next(fn(data));
+  };
 }
 
 function timer(time) {
-  return (data, next, {timerServer = timerError}) => {
+  return (data, next, { timerServer = timerError }) => {
     timerServer(() => {
-      next(data)
-    }, time)
-  }
+      next(data);
+    }, time);
+  };
 }
 
 function debounceTime(time) {
-  let hasPlay = false
-  return (data, next, {timerServer = timerError}) => {
+  let hasPlay = false;
+  return (data, next, { timerServer = timerError }) => {
     if (!hasPlay) {
-      hasPlay = true
-      timerServer(() => (hasPlay = false), time)
-      next(data)
+      hasPlay = true;
+      timerServer(() => { hasPlay = false; }, time);
+      next(data);
     }
-  }
+  };
 }
 
 function async() {
   return (data, next) => {
-    Promise.resolve(data).then(next)
-  }
+    Promise.resolve(data).then(next);
+  };
 }
 
 function scan(fn, preValue) {
   return (data, next) => {
-    preValue = fn(preValue, data)
-    next(preValue)
-  }
+    preValue = fn(preValue, data); // eslint-disable-line no-param-reassign
+    next(fn(preValue, data));
+  };
 }
-export {filter, map, timer, debounceTime, async, scan}
+export {
+  filter, map, timer, debounceTime, async, scan,
+};

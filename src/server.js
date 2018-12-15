@@ -5,72 +5,78 @@
 // 3. ServerFactory 可以继承servers, 并通过 Event 将接口暴露出来
 class ServerInstance {
   constructor(servers) {
-    Object.keys(servers).forEach(key => {
-      this[key] = (new servers[key]()).init()
-    })
+    Object.keys(servers).forEach((key) => {
+      this[key] = (new servers[key]()).init();
+    });
   }
 }
 export class Server {
-  init() {
-    return () => {}
+  init() { // eslint-disable-line class-methods-use-this
+    return () => {};
   }
 }
 function getClassName(Class) {
-  return Class.name.replace(/^\S/, sub => sub.toLowerCase())
+  return Class.name.replace(/^\S/, sub => sub.toLowerCase());
 }
 class ServerFactory {
   constructor() {
-    this.servers = ServerFactory.defaultServers
+    this.servers = ServerFactory.defaultServers;
   }
+
   create() {
-    return new ServerInstance(this.servers)
+    return new ServerInstance(this.servers);
   }
+
   use(serverClass) {
     if (serverClass && serverClass.prototype instanceof Server) {
-      this.servers[getClassName(serverClass)] = serverClass
+      this.servers[getClassName(serverClass)] = serverClass;
     }
   }
+
   extendServers(serverFactory) {
     if (serverFactory && serverFactory.constructor === ServerFactory) {
-      this.servers = Object.assign({}, serverFactory.servers, this.servers)
+      this.servers = Object.assign({}, serverFactory.servers, this.servers);
     }
   }
+
   static install(serverClass) {
     if (serverClass && serverClass instanceof Server) {
-      this.defaultServers[getClassName(serverClass)] = serverClass
+      this.defaultServers[getClassName(serverClass)] = serverClass;
     }
   }
 }
-ServerFactory.defaultServers = {}
+ServerFactory.defaultServers = {};
 
 export class TimerServer extends Server {
   constructor() {
-    super()
-    this.data = {}
-    this.id = 1
-    this.isUpdate = false
+    super();
+    this.data = {};
+    this.id = 1;
+    this.isUpdate = false;
   }
+
   add(cb, time) {
     if (this.isUpdate === false) {
-      this.isUpdate = true
+      this.isUpdate = true;
       Promise.resolve().then(() => {
-        delete this.data[this.id]
-        this.id++
-      })
+        delete this.data[this.id];
+        this.id++;
+      });
     }
     if (!this.data[this.id] || !this.data[this.id][time]) {
-      if (!this.data[this.id]) this.data[this.id] = {}
-      this.data[this.id][time] = [cb]
-      const list = this.data[this.id][time]
-      setTimeout(() => list.forEach(cb => cb()), time)
+      if (!this.data[this.id]) this.data[this.id] = {};
+      this.data[this.id][time] = [cb];
+      const list = this.data[this.id][time];
+      setTimeout(() => list.forEach(fn => fn()), time);
     } else {
-      this.data[this.id][time].push(cb)
+      this.data[this.id][time].push(cb);
     }
-    return this.data[this.id]
+    return this.data[this.id];
   }
+
   init() {
-    return (cb, time) => this.add(cb, time)
+    return (cb, time) => this.add(cb, time);
   }
 }
 
-export default ServerFactory
+export default ServerFactory;

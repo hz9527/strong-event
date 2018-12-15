@@ -1,5 +1,5 @@
 {
-  "name": "studyDemos",
+  "name": "strong-event",
   "version": "1.0.0",
   "description": "some demos",
   "scripts": {
@@ -24,6 +24,11 @@
     "rollup-plugin-node-resolve": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.2.1"
+    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "babel-eslint": "^8.2.6",
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "extends": "airbnb-base",
+  "plugins": ["babel"],
+  "parser": "babel-eslint",
+  "rules": {
+    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
+    "no-param-reassign": ["error", { "props": false }],
+    "no-plusplus": 0
+  }
+}
