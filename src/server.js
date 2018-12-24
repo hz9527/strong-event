@@ -59,6 +59,7 @@ export class TimerServer extends Server {
     if (this.isUpdate === false) {
       this.isUpdate = true;
       Promise.resolve().then(() => {
+        this.isUpdate = false;
         delete this.data[this.id];
         this.id++;
       });

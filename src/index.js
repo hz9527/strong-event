@@ -12,7 +12,7 @@ class Data {
     this.serverFactory = new ServerFactory();
   }
 }
-const defaultData = new Data();
+class SchedulerList extends Array {}
 const defaultServers = [TimerServer];
 
 function complete(data, method, value, cb = noop) {
@@ -28,15 +28,16 @@ function complete(data, method, value, cb = noop) {
 }
 
 class SuperEvent {
-  #data = defaultData
+  #data;
 
-  #schedulers = []
+  #schedulers;
 
   constructor() {
     if (this.constructor === SuperEvent) throw new Error("can't instantition SuperEvent");
   }
 
   pipe(fn) {
+    if (typeof fn !== 'function') throw new Error(`${fn} must be a sc;heduler`);
     // eslint-disable-next-line no-use-before-define
     return new ShareDataEvent(this.#data, this.#schedulers.concat(fn));
   }
@@ -75,20 +76,21 @@ class SuperEvent {
   }
 }
 class ShareDataEvent extends SuperEvent {
-  #schedulers = []
+  #schedulers;
 
-  #data = defaultData
+  #data;
 
   constructor(data, schedulers) {
     super();
-    this.#schedulers = schedulers;
-    this.#data = data;
+    this.#schedulers = schedulers && schedulers.constructor === SchedulerList
+      ? schedulers : new SchedulerList();
+    this.#data = data && data.constructor === Data ? data : new Data();
   }
 }
 export default class Event extends SuperEvent {
   #data = new Data()
 
-  #schedulers = []
+  #schedulers = new SchedulerList()
 
   constructor(serverOpt = true) {
     super();
