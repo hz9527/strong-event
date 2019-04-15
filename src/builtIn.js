@@ -47,6 +47,16 @@ function scan(fn, preValue) {
     next(fn(preValue, data));
   };
 }
+
+function takelatest(thenable) {
+  let id = 0;
+  return (data, next) => {
+    const token = ++id;
+    const handlerFactory = (isData = true) => result => token === id && next({ type: isData ? 'resolved' : 'rejected', result });
+    Promise.resolve(thenable(data)).then(handlerFactory(), handlerFactory(false));
+  };
+}
+
 export {
-  filter, map, timer, debounceTime, async, scan,
+  filter, map, timer, debounceTime, async, scan, takelatest,
 };

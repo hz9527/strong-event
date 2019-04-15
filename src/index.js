@@ -9,7 +9,7 @@ class Data {
   constructor() {
     this.index = [];
     this.content = {};
-    this.serverFactory = new ServerFactory();
+    this.serverFactory = null;
   }
 }
 class SchedulerList extends Array {}
@@ -28,12 +28,16 @@ function complete(data, method, value, cb = noop) {
 }
 
 class SuperEvent {
-  #data;
-
   #schedulers;
 
-  constructor() {
+  #data;
+
+  constructor(data, schedulers, serverFactory) {
     if (this.constructor === SuperEvent) throw new Error("can't instantition SuperEvent");
+    this.#schedulers = schedulers && schedulers.constructor === SchedulerList
+      ? schedulers : new SchedulerList();
+    this.#data = data && data.constructor === Data ? data : new Data();
+    this.#data.serverFactory = serverFactory && serverFactory.constructor === ServerFactory ? serverFactory : new ServerFactory();
   }
 
   pipe(fn) {
@@ -76,38 +80,28 @@ class SuperEvent {
   }
 }
 class ShareDataEvent extends SuperEvent {
-  #schedulers;
-
-  #data;
-
-  constructor(data, schedulers) {
-    super();
-    this.#schedulers = schedulers && schedulers.constructor === SchedulerList
-      ? schedulers : new SchedulerList();
-    this.#data = data && data.constructor === Data ? data : new Data();
-  }
 }
 export default class Event extends SuperEvent {
-  #data = new Data()
-
-  #schedulers = new SchedulerList()
+  #serverFactory;
 
   constructor(serverOpt = true) {
-    super();
+    const erverFactory = new ServerFactory();
+    super(null, null, erverFactory);
+    this.#serverFactory = erverFactory;
     if (serverOpt === true) { // use default server
       defaultServers.forEach((server) => {
-        this.#data.serverFactory.use(server);
+        this.#serverFactory.use(server);
       });
     }
   }
 
   useServer(server) {
-    this.#data.serverFactory.use(server);
+    this.#serverFactory.use(server);
   }
 
   extendEventServer(event) {
     if (event && (event.constructor === Event || event.constructor === ShareDataEvent)) {
-      this.#data.serverFactory.extendServers(event.#data.serverFactory);
+      this.#serverFactory.extendServers(event.#serverFactory);
     }
   }
 }

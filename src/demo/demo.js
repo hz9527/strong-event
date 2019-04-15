@@ -1,5 +1,5 @@
 import Event, {
-  filter, map, timer, debounceTime, async,
+  filter, map, timer, debounceTime, async, takelatest,
 } from '../index';
 /* eslint-disable no-console */
 const event = new Event();
@@ -58,3 +58,23 @@ event.emit(2);
 setTimeout(() => {
   event.emit(3);
 }, 5);
+
+// takelatest
+const thenable = data => new Promise((resolve, reject) => {
+  setTimeout(() => {
+    data > 3 ? reject(data) : resolve(data);
+  }, 500);
+});
+
+const event2 = new Event();
+event2.pipe(takelatest(thenable)).on(console.log);
+event2.emit(1);
+event2.emit(1.5);
+setTimeout(() => {
+  event2.emit(2);
+}, 100);
+
+setTimeout(() => {
+  console.log(2333);
+  event2.emit(3);
+}, 700);

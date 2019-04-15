@@ -6,18 +6,18 @@ const Configs = require('./config.js');
 //
 // const app = new express()
 
-Configs.forEach(({name, config: {inputOpt, outputOpt, template}}) => {
+Configs.forEach(({ name, config: { inputOpt, outputOpt } }) => {
   const watchOptions = {
     ...inputOpt,
     cache: true,
     output: [outputOpt],
-    watch: {}
+    watch: {},
   };
   const watcher = rollup.watch(watchOptions);
 
-  watcher.on('event', event => {
+  watcher.on('event', (event) => {
     if (event.code === 'FATAL') {
-      console.log(event, name)
+      console.log(event, name);
     }
-  })
-})
+  });
+});
