@@ -47,10 +47,15 @@ class BaseEvent {
   on(fn, ind = 0) {
     const opts = resolveSubscribe(fn, this.#schedulers);
     if (!opts) throw new Error(`${fn} is invaild`);
-    const index = typeof ind !== 'number' ? ind : 0;
+    const index = typeof ind === 'number' ? ind : 0;
     let i = 0;
-    while (index > this.#data.index[i++]);
-    this.#data.index[i] !== index && this.#data.index.splice(i, 0, index);
+    const len = this.#data.index.length;
+    while (index > this.#data.index[i] && len > i) {
+      i++;
+    }
+    if (this.#data.index[i] !== index) {
+      this.#data.index[i] > index ? this.#data.index.splice(i, 0, index) : this.#data.index.unshift(index);
+    }
     this.#data.content[index] = this.#data.content[index] || [];
     this.#data.content[index].push(opts);
     return new RemoveEvent(this.#data, index, fn);

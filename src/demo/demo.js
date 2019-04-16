@@ -2,6 +2,20 @@ import Event, {
   filter, map, timer, debounceTime, async, takelatest,
 } from '../index';
 /* eslint-disable no-console */
+// const event = new Event();
+// event.on((data) => {
+//   console.log('2', data);
+// }, 2);
+// event.on((data) => {
+//   console.log('1', data);
+// });
+// const thenable = data => new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     data > 3 ? reject(data) : resolve(data);
+//   }, 500);
+// });
+// event.pipe(takelatest(thenable)).on(console.log);
+// event.emit(123);
 const event = new Event();
 console.log(event.pipe(filter(() => {})));
 console.log(event.pipe(filter(() => {})).on(() => {}));
