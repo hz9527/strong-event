@@ -75,6 +75,6 @@ setTimeout(() => {
 }, 100);
 
 setTimeout(() => {
-  console.log(2333);
+  console.log(event2);
   event2.emit(3);
 }, 700);

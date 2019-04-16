@@ -9,7 +9,7 @@ class Data {
   constructor() {
     this.index = [];
     this.content = {};
-    this.serverFactory = null;
+    this.serverFactory = new ServerFactory();
   }
 }
 class SchedulerList extends Array {}
@@ -27,23 +27,21 @@ function complete(data, method, value, cb = noop) {
   });
 }
 
-class SuperEvent {
+class BaseEvent {
   #schedulers;
 
   #data;
 
-  constructor(data, schedulers, serverFactory) {
-    if (this.constructor === SuperEvent) throw new Error("can't instantition SuperEvent");
+  constructor(data, schedulers) {
+    this.#data = data && data.constructor === Data ? data : new Data();
     this.#schedulers = schedulers && schedulers.constructor === SchedulerList
       ? schedulers : new SchedulerList();
-    this.#data = data && data.constructor === Data ? data : new Data();
-    this.#data.serverFactory = serverFactory && serverFactory.constructor === ServerFactory ? serverFactory : new ServerFactory();
   }
 
   pipe(fn) {
     if (typeof fn !== 'function') throw new Error(`${fn} must be a sc;heduler`);
     // eslint-disable-next-line no-use-before-define
-    return new ShareDataEvent(this.#data, this.#schedulers.concat(fn));
+    return new BaseEvent(this.#data, this.#schedulers.concat(fn));
   }
 
   on(fn, ind = 0) {
@@ -79,15 +77,14 @@ class SuperEvent {
     });
   }
 }
-class ShareDataEvent extends SuperEvent {
-}
-export default class Event extends SuperEvent {
+
+export default class StrongEvent extends BaseEvent {
   #serverFactory;
 
   constructor(serverOpt = true) {
-    const erverFactory = new ServerFactory();
-    super(null, null, erverFactory);
-    this.#serverFactory = erverFactory;
+    const data = new Data();
+    super(data);
+    this.#serverFactory = data.serverFactory;
     if (serverOpt === true) { // use default server
       defaultServers.forEach((server) => {
         this.#serverFactory.use(server);
@@ -100,7 +97,7 @@ export default class Event extends SuperEvent {
   }
 
   extendEventServer(event) {
-    if (event && (event.constructor === Event || event.constructor === ShareDataEvent)) {
+    if (event && (event instanceof BaseEvent)) {
       this.#serverFactory.extendServers(event.#serverFactory);
     }
   }
