@@ -1,6 +1,6 @@
 {
   "name": "strong-event",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a powerful event",
   "scripts": {
     "start": "node ./build/dev.js",
@@ -11,6 +11,7 @@
     "url": "git+https://github.com/hz9527/strong-event.git"
   },
   "main": "./dist/strong_event.js",
+  "module": "./dist/strong_event.js",
   "keywords": ["eventbus"],
   "author": "huangzhong",
   "license": "ISC",

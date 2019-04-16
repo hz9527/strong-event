@@ -44,7 +44,7 @@ function async() {
 function scan(fn, preValue) {
   return (data, next) => {
     preValue = fn(preValue, data); // eslint-disable-line no-param-reassign
-    next(fn(preValue, data));
+    next(preValue);
   };
 }
 
