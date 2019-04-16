@@ -1,36 +1,38 @@
 {
   "name": "strong-event",
   "version": "1.0.0",
-  "description": "some demos",
+  "description": "a powerful event",
   "scripts": {
     "start": "node ./build/dev.js",
     "build": "NODE_ENV=production node ./build/build.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hz9527/demos.git"
+    "url": "git+https://github.com/hz9527/strong-event.git"
   },
-  "keywords": [],
-  "author": "",
+  "main": "./dist/strong_event.js",
+  "keywords": ["eventbus"],
+  "author": "huangzhong",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hz9527/demos/issues"
+    "url": "https://github.com/hz9527/strong-event/issues"
   },
-  "homepage": "https://github.com/hz9527/demos#readme",
-  "dependencies": {
-    "@babel/core": "^7.2.0",
-    "rollup": "^0.67.4",
-    "rollup-plugin-babel": "^4.0.3",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.0"
+  "homepage": "https://github.com/hz9527/strong-event#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.2.1",
     "babel-eslint": "^8.2.6",
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.14.0",
+    "rollup": "^0.67.4",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-terser": "^4.0.4"
   }
 }
