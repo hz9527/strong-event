@@ -53,26 +53,26 @@ event.emit(2)
 
 > can add subscribers for a event & dispatch data by event
 
-Event & ShareDataEvent extends SuperEvent.
+Event & ShareDataEvent extends BaseEvent.
 when you call pipe will return a ShareDataEvent instance.
-SuperEvent's prototype has `pipe` `on` `emit` `error` & `complete` methods.
+BaseEvent's prototype has `pipe` `on` `emit` `error` & `complete` methods.
 
-### `SuperEvent.prototype.on`
+### `BaseEvent.prototype.on`
 
 > return a subscriber instance & you can call off to unsubscribe this event
 
 first argument is callback or option, second argument is index of this callback
 (sort for subscriber's callbacks, every index saved in a array)
 
-### `SuperEvent.prototype.emit`
+### `BaseEvent.prototype.emit`
 
 > dispatch event for subscribers, you can emit a value
 
-### `SuperEvent.prototype.error & complete`
+### `BaseEvent.prototype.error & complete`
 
 > call it & all subscribers will not accept new event
 
-### `SuperEvent.prototype.pipe`
+### `BaseEvent.prototype.pipe`
 
 > return a ShareDataEvent instance, & share subscribers info with event instance
 
@@ -128,7 +128,7 @@ function timer(time) {
 how it work?
 
 ```js
-class SuperEvent {
+class BaseEvent {
   emit(data) {
     const servers = serverFactory.create() // return all Servers of event & new them
     subscribers.forEach(subscriber => exector(data, servers))
