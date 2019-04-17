@@ -45,28 +45,30 @@ class BaseEvent {
   }
 
   on(fn, ind = 0) {
+    const _data = this.#data; // eslint-disable-line no-underscore-dangle
     const opts = resolveSubscribe(fn, this.#schedulers);
     if (!opts) throw new Error(`${fn} is invaild`);
     const index = typeof ind === 'number' ? ind : 0;
     let i = 0;
-    const len = this.#data.index.length;
-    while (index > this.#data.index[i] && len > i) {
+    const len = _data.index.length;
+    while (index > _data.index[i] && len > i) {
       i++;
     }
-    if (this.#data.index[i] !== index) {
-      this.#data.index[i] > index ? this.#data.index.splice(i, 0, index) : this.#data.index.unshift(index);
+    if (_data.index[i] !== index) {
+      _data.index[i] > index ? _data.index.splice(i, 0, index) : _data.index.unshift(index);
     }
-    this.#data.content[index] = this.#data.content[index] || [];
-    this.#data.content[index].push(opts);
-    return new RemoveEvent(this.#data, index, fn);
+    _data.content[index] = _data.content[index] || [];
+    _data.content[index].push(opts);
+    return new RemoveEvent(_data, index, fn);
   }
 
   emit(data) {
     // 需要 for循环
-    const list = this.#data.index.slice();
-    const server = this.#data.serverFactory.create();
+    const privateData = this.#data;
+    const list = privateData.index.slice();
+    const server = privateData.serverFactory.create();
     for (let i = 0; i < list.length; i++) {
-      this.#data.content[list[i]].forEach((item) => {
+      privateData.content[list[i]].forEach((item) => {
         schedulerExector(item.schedulers, data, item.handler, server);
       });
     }
