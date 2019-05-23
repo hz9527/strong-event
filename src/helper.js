@@ -40,7 +40,7 @@ function resolveSubscribe(data, schedulers) {
     result.handler = data;
   } else {
     Object.keys(opts).forEach((key) => {
-      result[opts[key]] = data[key];
+      typeof data[key] && (result[opts[key]] = data[key]);
     });
   }
   return result;
